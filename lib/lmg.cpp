@@ -18,7 +18,21 @@ const log_message *logging_messages[]{
 	&error_wrong_extension,
 	&instructions,
 	&warn_bad_triplet,
+	&warn_bad_pixel,
+	&error_bad_image_size,
 	NULL
+};
+
+const log_message error_bad_image_size{
+	error,
+	ERROR_BAD_IMAGE_SIZE,
+	ACR "ERROR" ACS ": Image size does not match selected size, remember that non square map sizes are not supported\0"
+};
+
+const log_message warn_bad_pixel{
+	warn,
+	WARN_BAD_PIXEL,
+	ACY "WARNING" ACS ": Pixel has non matching RGB values, this is not intended in single type mode, a plain avarage of all 3 colors will be used insted.\0"
 };
 
 const log_message no_output_file{
@@ -105,14 +119,26 @@ const log_message instructions{
 	ACG "DFHM - Dwarf fortress heightmap translator" ACS "\n\n"
 	ACB "General usage" ACS ": ./DFHM <mode> <size> [program instructions]" "\n"
 	"Available modes: Heightmap (or simply H) --- Biome (or simply B) -- only the first letter of the mode argument is evaluated \n\n"
-	ACC "Heightmap usage" ACS ": ./DFHM Heightmap <size> [<image> <output type> <output file>]\n"
-	"Where <size> is a supported DF world size and [<output type> <image> <output file>] is a triplet of \"linked\" arguments "
-	"you can skip the <output file> member, all triplets after the first none matching or incomplete triplet will be ignored\n"
+
+	ACC "Heightmap usage" ACS ": ./DFHM Heightmap <size> <output type> <image> <output file>\n"
+	"Where <size> is a supported DF world size and <output type> <image> <output file> are the program inputs and outputs"
+	"you can skip the <output file> member, the program will use the default output in such case\n"
 	"Supported sizes: 17 33 65 129 257, preset generation of non square maps is not supported\n\n"
-	"All <image> arguments " ACR "MUST" ACS " end with .bmp, all <output> arguments " ACR "MUST" ACS " end with .txt\n"
-	"Example heightmap usage: ./DFHM Heightmap 257 Elevation image1.bmp Altitude.txt Rainfaill image2.bmp\n\n"
+	"To specify a type you can either write the whole name or use a switch only the first letter will be evaluated in either case:\n\n"
+	"Valid types:\t<Full type>\t<Switch>\n"
+	"\t\tElevation\t-E\n"
+	"\t\tRainfall\t-R\n"
+	"\t\tTemperature\t-T\n"
+	"\t\tDrainage\t-D\n"
+	"\t\tVolcanism\t-V\n"
+	"\t\tSavagery\t-S\n\n"
+	"The input image can be any 8bit-depth .bmp, but the program expects a file where all pixels R, G and B values are the same per pixel (a greyscale image)\n"
+	"Example heightmap usage: ./DFHM Heightmap 257 Elevation image1.bmp Altitude.txt\n\n"
+
 	ACG "Biome usage" ACS ": ./DFHM Biome <size> <Image> <output file>\n"
-	"the <image> argument " ACR "MUST" ACS " end with .bmp, the <output> argument " ACR "MUST" ACS " end with .txt\n"
+	"Where <size> is a supported DF world size and <output type> <image> <output file> are the program inputs and outputs"
+	"you can skip the <output file> member, the program will use the default output in such case\n"
+	"Supported sizes: 17 33 65 129 257, preset generation of non square maps is not supported\n\n"
 	"The input image can be any 8bit-depth .bmp file but it is meant to be use with images where pixel data corresponds in the following manner:\n"
 	ACR "RED\t" ACS " corresponds to the temperature scale\n"
 	ACB "BLUE\t" ACS " corresponds to the rainfall scale\n"

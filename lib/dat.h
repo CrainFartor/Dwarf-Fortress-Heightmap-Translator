@@ -5,6 +5,7 @@
 
 struct s_map{
 	const char 						*name;
+	const char 						*ps_start;
 	const char						*bsh_swt;
 	const unsigned int		i;
 	const unsigned int		scale_max;

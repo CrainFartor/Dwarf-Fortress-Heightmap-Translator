@@ -13,7 +13,7 @@ const unsigned int valid_sizes[]{
 const map *map_list[]{
 	&map_elevation,
 	&map_rainfall,
-	&map_elevation,
+	&map_temparature,
 	&map_drainage,
 	&map_volcanism,
 	&map_savagery,
@@ -22,6 +22,7 @@ const map *map_list[]{
 
 const map map_elevation{
 	"Elevation\0",
+	"[PS_EL\0",
 	"-E\0",
 	0,
 	400,
@@ -29,6 +30,7 @@ const map map_elevation{
 };
 const map map_rainfall{
 	"Rainfall\0",
+	"[PS_RF\0",
 	"-R\0",
 	1,
 	100,
@@ -36,6 +38,7 @@ const map map_rainfall{
 };
 const map map_temparature{
 	"Temperature\0",
+	"[PS_TP\0",
 	"-T\0",
 	2,
 	170,
@@ -43,6 +46,7 @@ const map map_temparature{
 };
 const map map_drainage{
 	"Drainage\0",
+	"[PS_DR\0",
 	"-D\0",
 	3,
 	100,
@@ -50,6 +54,7 @@ const map map_drainage{
 };
 const map map_volcanism{
 	"Volcanism\0",
+	"[PS_VL\0",
 	"-V\0",
 	4,
 	100,
@@ -57,6 +62,7 @@ const map map_volcanism{
 };
 const map map_savagery{
 	"Savagery\0",
+	"[PS_SV\0",
 	"-S\0",
 	5,
 	100,

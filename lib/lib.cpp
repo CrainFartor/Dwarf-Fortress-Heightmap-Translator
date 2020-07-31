@@ -167,3 +167,210 @@ int validate_case_insensitive(char *s1, char *s2, unsigned int n){
 	if(strncmp(buf1, buf2, n) != 0) return -1;
 	else return 0;
 }
+
+int validate_image_size(BMP *input, int size){
+
+	if( (input->TellHeight() != size) || (input->TellWidth() != size) ){
+		log::l(ERROR_BAD_IMAGE_SIZE);
+		return -1;
+	}
+
+	return 0;
+}
+
+const map *get_map_type(char *type){
+	unsigned int i=0;
+
+	for(i=0;map_list[i]!=NULL;i++){
+		if( (0 == validate_case_insensitive((char *)map_list[i]->bsh_swt, type, 2))
+		||	(0 == validate_case_insensitive((char *)map_list[i]->name, type, 1))){
+			return map_list[i];
+		}
+	}
+
+	log::l(ERROR_FLOW_CONTROL);
+	return NULL;
+}
+
+unsigned int get_type_color(const map *type){
+	if( validate_case_insensitive((char *)type->bsh_swt, "-T", 2) == 0) return RED;
+	if( validate_case_insensitive((char *)type->bsh_swt, "-R", 2) == 0) return BLUE;
+	if( validate_case_insensitive((char *)type->bsh_swt, "-D", 2) == 0) return GREEN;
+	if( validate_case_insensitive((char *)type->bsh_swt, "-S", 2) == 0) return ALPHA;
+
+	log::l(ERROR_FLOW_CONTROL);
+	return 100;
+}
+
+int generate_greyscale_preset(int size, const map *type, char *input, char *output){
+	BMP Heightmap;
+	bool pixel_warn = false;
+	unsigned long i=0, j=0;
+	int pixel_val=0;
+	FILE *output_fp=NULL;
+	char buffer[BFL]={0};
+
+	if (true != Heightmap.ReadFromFile(input) ){
+		log::l(ERROR_OPEN_FILE);
+		return -1;
+	}
+	else{
+		log::ls("The input file was recognized as a .bmp file",true);
+	}
+	if(output == NULL){
+		output = (char *)type->default_output;
+	}
+
+	if( NULL == (output_fp = fopen(output, "w")) ){
+		log::l(ERROR_OPEN_FILE);
+		printf("file: %s\n", output);
+		return -2;
+	}
+
+	if(0 != validate_image_size(&Heightmap, size) ) return -1;
+
+	for(i=0;i<(unsigned long)size;i++){
+		for(j=0;j<(unsigned long)size;j++){
+			pixel_val = read_pixel_greyscale(&Heightmap, i, j, &pixel_warn);
+			pixel_val = (type->scale_max * pixel_val) / MRV;
+			if(pixel_warn == true){
+				printf("pixel: %ld, %ld\n", i, j);
+				log::l(WARN_BAD_PIXEL);
+			}
+			if(j == 0) fwrite(type->ps_start, sizeof(char), 6, output_fp);
+
+			if( validate_case_insensitive((char *)type->bsh_swt, "-T", 2) == 0) pixel_val -= 30;
+
+			bzero(buffer,BFL);
+			sprintf(buffer, "%d", pixel_val);
+
+			fwrite(":\0\0", sizeof(char), 1, output_fp);
+			fwrite(buffer, sizeof(char), strlen(buffer), output_fp);
+
+			if(j>=(unsigned long)size-1)	fwrite("]\n\0\0", sizeof(char), 2, output_fp);
+		}
+	}
+
+	fclose(output_fp);
+	return 0;
+}
+
+int generate_biome_preset(int size, char *input, char *output){
+	BMP Heightmap;
+	FILE *output_fp=NULL;
+	unsigned int i=0;
+
+	const map *type[]{
+		&map_rainfall,
+		&map_temparature,
+		&map_drainage,
+		&map_savagery,
+		NULL
+	};
+
+
+	if (true != Heightmap.ReadFromFile(input) ){
+		log::l(ERROR_OPEN_FILE);
+		return -1;
+	}
+	else{
+		log::ls("The input file was recognized as a .bmp file",true);
+	}
+	if(output == NULL){
+		output = "preset.txt\0";
+	}
+
+	if( NULL == (output_fp = fopen(output, "w")) ){
+		log::l(ERROR_OPEN_FILE);
+		printf("file: %s\n", output);
+		return -2;
+	}
+
+	if(0 != validate_image_size(&Heightmap, size) ) return -1;
+
+	for(i=0;i<4;i++){
+		write_biome_preset(&Heightmap, size, type[i], input, output_fp);
+	}
+
+	fclose(output_fp);
+	return 0;
+}
+
+int write_biome_preset(BMP *Heightmap, int size, const map *type, char *input, FILE *output){
+	bool pixel_warn = false;
+	unsigned long i=0, j=0;
+	int pixel_val=0;
+	char buffer[BFL]={0};
+
+	unsigned int color = get_type_color(type);
+
+	for(i=0;i<(unsigned long)size;i++){
+		for(j=0;j<(unsigned long)size;j++){
+			pixel_val = read_pixel_color(Heightmap, i, j, color);
+			pixel_val = (type->scale_max * pixel_val) / MRV;
+			if(pixel_warn == true){
+				printf("pixel: %ld, %ld\n", i, j);
+				log::l(WARN_BAD_PIXEL);
+			}
+			if(j == 0) fwrite(type->ps_start, sizeof(char), 6, output);
+
+			if( validate_case_insensitive((char *)type->bsh_swt, "-T", 2) == 0) pixel_val -= 30;
+
+			bzero(buffer,BFL);
+			sprintf(buffer, "%d", pixel_val);
+
+			fwrite(":\0\0", sizeof(char), 1, output);
+			fwrite(buffer, sizeof(char), strlen(buffer), output);
+
+			if(j>=(unsigned long)size-1)	fwrite("]\n\0\0", sizeof(char), 2, output);
+		}
+	}
+
+	return 0;
+}
+
+int read_pixel_greyscale(BMP *Heightmap, unsigned long i, unsigned long j, bool *warn){
+	unsigned long acc=0;
+	RGBApixel	pixel;
+
+	pixel = Heightmap->GetPixel(i,j);
+
+	if((pixel.Red != pixel.Blue) || (pixel.Red != pixel.Green) || (pixel.Blue != pixel.Green) ){
+		*warn = true;
+		acc = (pixel.Red + pixel.Blue + pixel.Green)/3;
+		return acc;
+	}
+	else{
+		*warn = false;
+		return pixel.Red;
+	}
+}
+
+int read_pixel_color(BMP *Heightmap, unsigned long i, unsigned long j, unsigned int color){
+	RGBApixel	pixel;
+
+	pixel = Heightmap->GetPixel(i,j);
+
+	switch (color) {
+		case RED:
+			return pixel.Red;
+		break;
+
+		case GREEN:
+			return pixel.Green;
+		break;
+
+		case BLUE:
+			return pixel.Blue;
+		break;
+
+		case ALPHA:
+			return pixel.Alpha;
+		break;
+
+		default:
+			log::l(ERROR_FLOW_CONTROL);
+			return -200;
+		break;
+	}
+}

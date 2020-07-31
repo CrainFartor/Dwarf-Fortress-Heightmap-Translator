@@ -24,6 +24,8 @@ extern const log_message error_short_file;
 extern const log_message error_wrong_extension;
 extern const log_message no_output_file;
 extern const log_message warn_bad_triplet;
+extern const log_message warn_bad_pixel;
+extern const log_message error_bad_image_size;
 
 #define		LMGS						logging_messages
 
@@ -38,7 +40,9 @@ extern const log_message warn_bad_triplet;
 #define		ERROR_WRONG_EXTENSION						9
 #define		ERROR_SHORT_FILE								10
 #define		NO_OUTPUT_FILE									11
-#define		WARN_BAD_TRIPLET								12
+#define		WARN_BAD_PIXEL									12
+#define		WARN_BAD_TRIPLET								13
+#define		ERROR_BAD_IMAGE_SIZE						14
 //#define
 //#define
 
