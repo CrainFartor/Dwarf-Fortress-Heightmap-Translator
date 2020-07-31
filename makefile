@@ -1,6 +1,6 @@
 CC=g++
-CFLAGS= -Wall
-LIBS=./lib/lib.cpp ./lib/EasyBMP.cpp ./lib/dat.cpp
+CFLAGS= -Wall -Wno-write-strings
+LIBS=./lib/lib.cpp ./lib/EasyBMP.cpp ./lib/dat.cpp ./lib/log.cpp ./lib/lmg.cpp
 MAIN=./src/main.cpp
 EXE=DFHM
 
