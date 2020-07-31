@@ -15,10 +15,4 @@ int validate_extension(const char *s, const char *ext);
 int validate_triplet(char const *argv[], int i);
 int validate_case_insensitive(char *s1, char *s2, unsigned int n);
 
-
-triplet *make_tripplet(char *t);
-int  assemble_tripplet(triplet **trp, char *t, char *in, char *out);
-void free_triplet(triplet *t);
-void print_triplet(triplet *t);
-
 #endif

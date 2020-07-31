@@ -17,6 +17,7 @@ const log_message *logging_messages[]{
 	&no_output_file,
 	&error_wrong_extension,
 	&instructions,
+	&warn_bad_triplet,
 	NULL
 };
 
@@ -85,6 +86,12 @@ const log_message error_short_file{
 	error,
 	ERROR_SHORT_FILE,
 	ACR "ERROR" ACS ": filename lenght is too short wich indicates either a file name just \".<extension>\" or an outright invalid argument\0"
+};
+
+const log_message warn_bad_triplet {
+	warn,
+	WARN_BAD_TRIPLET,
+	ACY "WARNING" ACS ": failed to validate triplet, this and all following triplets will be ignored\0"
 };
 
 const log_message error_wrong_extension{

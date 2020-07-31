@@ -11,12 +11,6 @@ struct s_map{
 	const char						*default_output;
 }typedef map;
 
-struct s_triplet{
-	char 									*type;
-	FILE									*input;
-	FILE									*output;
-}typedef triplet;
-
 extern const unsigned int valid_sizes[];
 extern const map					*map_list[];
 extern const map 					map_elevation;

@@ -23,6 +23,7 @@ extern const log_message error_open_file;
 extern const log_message error_short_file;
 extern const log_message error_wrong_extension;
 extern const log_message no_output_file;
+extern const log_message warn_bad_triplet;
 
 #define		LMGS						logging_messages
 
@@ -37,7 +38,7 @@ extern const log_message no_output_file;
 #define		ERROR_WRONG_EXTENSION						9
 #define		ERROR_SHORT_FILE								10
 #define		NO_OUTPUT_FILE									11
-//#define
+#define		WARN_BAD_TRIPLET								12
 //#define
 //#define
 
