@@ -24,8 +24,7 @@ const log_message *logging_messages[]{
 const log_message no_output_file{
 	info,
 	NO_OUTPUT_FILE,
-	ACY "NOTICE" ACS ": No output file specified for this triplet, the program will use the default output file.\n"
-	"If you are trying to generate multiple heightmaps for this type the output of this triplet may be overriden\0"
+	ACY "NOTICE" ACS ": No output file specified, the program will use the default output file.\0"
 };
 
 const log_message error_no_args{

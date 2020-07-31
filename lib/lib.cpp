@@ -42,7 +42,7 @@ int prevalidation(int argc, char const *argv[], bool *mode){
 			}
 		}
 		else{
-			if(argc < 4){
+			if(argc < 3){
 				log::l(ERROR_INSUFFICIENT_ARGUMENTS);
 				return -5;
 			}
@@ -58,10 +58,38 @@ int prevalidation(int argc, char const *argv[], bool *mode){
 		return -6;
 	}
 
+	if(*mode == ACTIVE_MODE_HEIGHTMAP){
+		if(validate_type(*(argv+3)) != 0){
+			log::l(ERROR_BAD_TYPE);
+			log::ldat((char *)*(argv+3));
+			return -7;
+		}
+		if(validate_file(*(argv+4)) != 0){
+			log::l(ERROR_OPEN_FILE);
+			log::ldat((char *)*(argv+4));
+			return -8;
+		}
+		if(validate_out(*(argv+5)) != 0){
+			log::l(NO_OUTPUT_FILE);
+		}
+	}
+	else{
+		if(validate_file(*(argv+3)) != 0){
+			log::l(ERROR_OPEN_FILE);
+			log::ldat((char *)*(argv+3));
+			return -9;
+		}
+		if(validate_out(*(argv+4)) != 0){
+			log::l(NO_OUTPUT_FILE);
+		}
+	}
+
 	log::ls("Successfully validatd mode, size and argument number", true);
 	log::draw_bar('-',SBL);		//Draw second bar to encapsulate the prevalitaion messages
 	return 0;
 }
+
+int validate_out(const char *s){	return (s != NULL) ? 0 : -1;	}
 
 int validate_mode(const char *s){
 	if((validate_case_insensitive((char *)s, "heightmap\0", 1) != 0) &&
@@ -72,13 +100,12 @@ int validate_mode(const char *s){
 int validate_size(const char *s){
 	unsigned int i=0;
 	for(i=0;valid_sizes[i]!=0;i++){
-		if(info <= log::get_log_level()) printf("comparing: %d vs %d\ti=%d\n", valid_sizes[i], atoi(s), i);
 		if( (signed int)valid_sizes[i] == atoi(s) ) return 0;
 	}
 	return -1;
 }
 
-int validate_type(const char *s, bool warn){
+int validate_type(const char *s){
 	unsigned int i=0;
 
 	for(i=0;map_list[i]!=NULL;i++){
@@ -88,14 +115,20 @@ int validate_type(const char *s, bool warn){
 		}
 	}
 
-	if(warn == true){
-		log::l(ERROR_BAD_TYPE);
-		log::ldat((char *)s);
-	}
-
 	return -1;
 }
 
+int validate_file(const char *s){
+	FILE *fpaux = NULL;
+	if( NULL == (fpaux = fopen(s, "r")) ){
+		return -1;
+	}
+	else{
+		fclose(fpaux);
+		return 0;
+	}
+}
+/*
 int validate_extension(const char *s, const char *ext){
 	if( strlen(s) <= strlen(ext) ){
 		log::l(ERROR_SHORT_FILE);
@@ -112,7 +145,7 @@ int validate_extension(const char *s, const char *ext){
 		}
 	}
 }
-
+*/
 int validate_case_insensitive(char *s1, char *s2, unsigned int n){
 	char buf1[VBL]={0},  buf2[VBL]={0};
 	int len=0;
