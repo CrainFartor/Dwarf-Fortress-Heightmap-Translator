@@ -264,7 +264,6 @@ int generate_biome_preset(int size, char *input, char *output){
 		&map_rainfall,
 		&map_temparature,
 		&map_drainage,
-		&map_savagery,
 		NULL
 	};
 
@@ -288,7 +287,7 @@ int generate_biome_preset(int size, char *input, char *output){
 
 	if(0 != validate_image_size(&Heightmap, size) ) return -1;
 
-	for(i=0;i<4;i++){
+	for(i=0;i<3;i++){
 		write_biome_preset(&Heightmap, size, type[i], input, output_fp);
 	}
 
@@ -338,7 +337,7 @@ int read_pixel_greyscale(BMP *Heightmap, unsigned long i, unsigned long j, bool 
 	if((pixel.Red != pixel.Blue) || (pixel.Red != pixel.Green) || (pixel.Blue != pixel.Green) ){
 		*warn = true;
 		acc = (pixel.Red + pixel.Blue + pixel.Green)/3;
-		return acc;
+		return (unsigned int)acc;
 	}
 	else{
 		*warn = false;
