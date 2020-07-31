@@ -1,5 +1,0 @@
-./DFHM H 257 -E ./test-images/Heigh_mixed-3.bmp
-./DFHM H 257 -D ./test-images/Heigh_center_segments-2-Drainage-5-257.bmp
-./DFHM H 257 -R ./test-images/Heigh_center_segments-2-Rainfall-3-257.bmp
-
-./DFHM B 257 ./test-images/Heigh_center_segments-2-Rainfall-3-257.bmp
