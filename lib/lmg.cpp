@@ -143,7 +143,6 @@ const log_message instructions{
 	ACR "RED\t" ACS " corresponds to the temperature scale\n"
 	ACB "BLUE\t" ACS " corresponds to the rainfall scale\n"
 	ACG "GREEN\t" ACS " corresponds to the drainage scale\n"
-	ACM "ALPHA\t" ACS " corresponds to the savagery scale\n\n"
 	"Example biome usage: ./DFHM Biome 65 biomes.bmp presets.txt"
 	"\0"
 };
