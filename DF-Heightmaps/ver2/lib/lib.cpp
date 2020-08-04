@@ -5,7 +5,6 @@
 #include "../def/def.h"
 #include "../lib/log.h"
 #include "../lib/col.h"
-#include "../lib/EasyBMP.h"
 #include "../lib/lmg.h"
 
 int prevalidation(int argc, char const *argv[], bool *mode){
@@ -196,7 +195,7 @@ unsigned int get_type_color(const map *type){
 	if( validate_case_insensitive((char *)type->bsh_swt, "-T", 2) == 0) return RED;
 	if( validate_case_insensitive((char *)type->bsh_swt, "-R", 2) == 0) return BLUE;
 	if( validate_case_insensitive((char *)type->bsh_swt, "-D", 2) == 0) return GREEN;
-	if( validate_case_insensitive((char *)type->bsh_swt, "-S", 2) == 0) return ALPHA;
+	if( validate_case_insensitive((char *)type->bsh_swt, "-S", 2) == 0) return RED;
 
 	log::l(ERROR_FLOW_CONTROL);
 	return 100;
@@ -262,7 +261,7 @@ int generate_biome_preset(int size, char *input, char *output){
 
 	const map *type[]{
 		&map_rainfall,
-		&map_temparature,
+		&map_savagery,
 		&map_drainage,
 		NULL
 	};
