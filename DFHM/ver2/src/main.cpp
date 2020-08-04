@@ -2,7 +2,6 @@
 #include "../lib/lib.h"
 #include "../lib/log.h"
 #include "../lib/col.h"
-#include "../lib/EasyBMP.h"
 #include "../def/def.h"
 #include "../lib/dat.h"
 #include "../lib/lmg.h"

@@ -140,7 +140,7 @@ const log_message instructions{
 	"you can skip the <output file> member, the program will use the default output in such case\n"
 	"Supported sizes: 17 33 65 129 257, preset generation of non square maps is not supported\n\n"
 	"The input image can be any 8bit-depth .bmp file but it is meant to be use with images where pixel data corresponds in the following manner:\n"
-	ACR "RED\t" ACS " corresponds to the temperature scale\n"
+	ACR "RED\t" ACS " corresponds to the savagery scale\n"
 	ACB "BLUE\t" ACS " corresponds to the rainfall scale\n"
 	ACG "GREEN\t" ACS " corresponds to the drainage scale\n"
 	"Example biome usage: ./DFHM Biome 65 biomes.bmp presets.txt"

@@ -1,7 +1,7 @@
 #ifndef	LIBRERIAS
 #define	LIBRERIAS	255
 
-#include "../lib/EasyBMP.h"
+#include "../../EasyBMP/EasyBMP.h"
 #include	"dat.h"
 
 #define		VALIDATION_BUFFER_LENGTH	2048

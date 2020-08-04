@@ -2,7 +2,6 @@
 #include "../lib/lib_legacy.h"
 #include "../lib/col.h"
 #include "../lib/dat_legacy.h"
-#include "../lib/EasyBMP.h"
 #include "../def/def_legacy.h"
 
 int validations(int argc, char const *argv[], BMP *Heightmap, unsigned int *size, unsigned char *selected_type, unsigned char *type_i){
