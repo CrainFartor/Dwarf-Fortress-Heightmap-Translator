@@ -230,7 +230,7 @@ int generate_greyscale_preset(int size, const map *type, char *input, char *outp
 
 	for(i=0;i<(unsigned long)size;i++){
 		for(j=0;j<(unsigned long)size;j++){
-			pixel_val = read_pixel_greyscale(&Heightmap, i, j, &pixel_warn);
+			pixel_val = read_pixel_greyscale(&Heightmap, j, i, &pixel_warn);
 			pixel_val = (type->scale_max * pixel_val) / MRV;
 			if(pixel_warn == true){
 				printf("pixel: %ld, %ld\n", i, j);
